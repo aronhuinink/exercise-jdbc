@@ -2,6 +2,8 @@ package nl.han.aim.oose.dea.datasource;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import nl.han.aim.oose.dea.datasource.util.DatabaseProperties;
 import nl.han.aim.oose.dea.domain.Item;
@@ -10,8 +12,11 @@ public class ItemDao {
 
     private DatabaseProperties dbProperties;
 
-    public ItemDao(DatabaseProperties properties) {
-        dbProperties = properties;
+    private Logger logger;
+
+    public ItemDao(DatabaseProperties dbProperties, Logger logger) {
+        this.dbProperties = dbProperties;
+        this.logger = logger;
     }
 
     public List<Item> findAll() {
@@ -29,7 +34,7 @@ public class ItemDao {
                 resultItems.add(new Item(sku, category, title));
             }
         } catch (SQLException e) {
-            System.out.println("Database error: " + e);
+            logger.log(Level.INFO, "Database error: " + e);
             throw new RuntimeException(e);
         }
         return resultItems;
